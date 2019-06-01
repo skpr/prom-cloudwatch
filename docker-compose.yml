@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.1.0
+    ports:
+      - 9090:9090
+      - 9000:9000
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+
+  storage:
+    build: .
+    environment:
+      - "AWS_REGION=ap-southeast-2"
+      - "AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxxxxx"
+      - "AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxx"
