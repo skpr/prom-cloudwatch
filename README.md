@@ -18,5 +18,5 @@ INFO[0000] Starting server: :8080    source="main.go:102"
 
 ```yaml
 remote_write:
-  - url: http://storage:8080/write
+  - url: http://127.0.0.1:8080/write
 ```
