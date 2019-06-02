@@ -1,4 +1,4 @@
-Prometheus: CloudWatch
+Prometheus: CloudWatch [![CircleCI](https://circleci.com/gh/skpr/prometheus-cloudwatch.svg?style=svg)](https://circleci.com/gh/skpr/prometheus-cloudwatch)
 ======================
 
 Prometheus remote writer for CloudWatch.
@@ -19,5 +19,5 @@ INFO[0000] Starting metrics servere: :9000               source="main.go:152"
 
 ```yaml
 remote_write:
-  - url: http://storage:8080/write
+  - url: http://127.0.0.1:8080/write
 ```
