@@ -62,6 +62,14 @@
   version = "v1.19.41"
 
 [[projects]]
+  digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
+  name = "github.com/beorn7/perks"
+  packages = ["quantile"]
+  pruneopts = "UT"
+  revision = "4b2b341e8d7715fae06375aa633dbb6e91b3fb46"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
@@ -125,6 +133,14 @@
   version = "v1.9.0"
 
 [[projects]]
+  digest = "1:9e7526e11db6484ed8e23be8a874092875fd4b3bfcd139a2195d12c13a08c651"
+  name = "github.com/heptio/workgroup"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "905fccf41a08323fdad6a1bd277290fdc54d92c3"
+  version = "v0.8.0-beta.1"
+
+[[projects]]
   digest = "1:bb81097a5b62634f3e9fec1014657855610c82d19b9a40c17612e32651e35dca"
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
@@ -140,6 +156,14 @@
   version = "v1.0.2"
 
 [[projects]]
+  digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
+  name = "github.com/matttproud/golang_protobuf_extensions"
+  packages = ["pbutil"]
+  pruneopts = "UT"
+  revision = "c12348ce28de40eed0136aa2b644d0ee0650e56c"
+  version = "v1.0.1"
+
+[[projects]]
   digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
@@ -148,15 +172,48 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:ed67df0101404b2000884804420621bc5c1afca3b3274498c579d560e8c00492"
+  digest = "1:0de31727c88e9f4a4ae70c28b6caa27f39b25788daf2dc4f7406013421228144"
+  name = "github.com/prometheus/client_golang"
+  packages = [
+    "prometheus",
+    "prometheus/internal",
+    "prometheus/promhttp",
+  ]
+  pruneopts = "UT"
+  revision = "50c4339db732beb2165735d2cde0bff78eb3c5a5"
+  version = "v0.9.3"
+
+[[projects]]
+  branch = "master"
+  digest = "1:2d5cd61daa5565187e1d96bae64dbbc6080dacf741448e9629c64fd93203b0d4"
+  name = "github.com/prometheus/client_model"
+  packages = ["go"]
+  pruneopts = "UT"
+  revision = "fd36f4220a901265f90734c3183c5f0c91daa0b8"
+
+[[projects]]
+  digest = "1:6d7fb387ff84614fe40d35cd30f5b34dd7384bf075efef4823213a8cc5113007"
   name = "github.com/prometheus/common"
   packages = [
+    "expfmt",
+    "internal/bitbucket.org/ww/goautoneg",
     "log",
     "model",
   ]
   pruneopts = "UT"
   revision = "17f5ca1748182ddf24fc33a5a7caaaf790a52fcc"
   version = "v0.4.1"
+
+[[projects]]
+  digest = "1:f8fac244ec2cb7daef48b0148dcf5a330ac7697fa83c2e1e78e65b21f7f43500"
+  name = "github.com/prometheus/procfs"
+  packages = [
+    ".",
+    "internal/fs",
+  ]
+  pruneopts = "UT"
+  revision = "65bdadfa96aecebf4dcf888da995a29eab4fc964"
+  version = "v0.0.1"
 
 [[projects]]
   digest = "1:7a42a49b115cb1500682e6fa5a5fe3e23c18ee2db3c3dc7b23f64828d1c5e06b"
@@ -315,6 +372,8 @@
     "github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface",
     "github.com/gogo/protobuf/proto",
     "github.com/golang/snappy",
+    "github.com/heptio/workgroup",
+    "github.com/prometheus/client_golang/prometheus/promhttp",
     "github.com/prometheus/common/log",
     "github.com/prometheus/common/model",
     "github.com/prometheus/prometheus/prompb",

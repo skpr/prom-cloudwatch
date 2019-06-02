@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"math"
+	"net"
 	"net/http"
 	"time"
 
@@ -12,30 +12,49 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/snappy"
+	"github.com/heptio/workgroup"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/prompb"
 	"github.com/rs/xid"
-	"github.com/skpr/prometheus-cloudwatch/internal/storage"
 	"gopkg.in/alecthomas/kingpin.v2"
+
+	"github.com/skpr/prometheus-cloudwatch/internal/storage"
 )
 
 var (
-	cliPort      = kingpin.Flag("port", "Port which to receive requests.").Envar("PROM_CLOUDWATCH_PORT").Default("8080").Int()
+	cliAddress   = kingpin.Flag("address", "Address which this writer will respond to requests.").Envar("PROM_CLOUDWATCH_ADDRESS").Default(":8080").String()
 	cliNamespace = kingpin.Flag("namespace", "CloudWatch naemspace to store metrics.").Envar("PROM_CLOUDWATCH_NAMESPACE").Default("prometheus").String()
 	cliBatch     = kingpin.Flag("batch", "Number of records to push in a batch.").Envar("PROM_CLOUDWATCH_BATCH").Default("10").Int()
 	cliFrequency = kingpin.Flag("frequency", "How frequently to allow a push to CloudWatch.").Envar("PROM_CLOUDWATCH_FREQUENCY").Default("1m").Duration()
 	cliVerbose   = kingpin.Flag("verbose", "Print addition debug information.").Envar("PROM_CLOUDWATCH_VERBOSE").Bool()
+	cliExporter  = kingpin.Flag("exporter", "Address which Prometheus exporter metrics can be scraped.").Envar("PROM_CLOUDWATCH_EXPORTER").Default(":9000").String()
 )
 
 func main() {
 	kingpin.Parse()
 
-	svc := cloudwatch.New(session.New())
+	wg := workgroup.Group{}
 
+	// Expose metrics for debugging.
+	wg.Add(metrics)
+
+	// Start writing metrics.
+	wg.Add(writer)
+
+	if err := wg.Run(); err != nil {
+		panic(err)
+	}
+}
+
+// Starts to Prometheus writer.
+func writer(stop <-chan struct{}) error {
 	lock := time.Now()
 
-	http.HandleFunc("/write", func(w http.ResponseWriter, r *http.Request) {
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/write", func(w http.ResponseWriter, r *http.Request) {
 		logger := log.With("request", xid.New())
 
 		if time.Now().Before(lock) {
@@ -65,6 +84,8 @@ func main() {
 		}
 
 		lock = time.Now().Add(*cliFrequency)
+
+		svc := cloudwatch.New(session.New())
 
 		client, err := storage.New(logger, svc, *cliNamespace, *cliBatch)
 		if err != nil {
@@ -97,11 +118,40 @@ func main() {
 		}
 	})
 
-	addr := fmt.Sprintf(":%d", *cliPort)
+	listen, err := net.Listen("tcp", *cliAddress)
+	if err != nil {
+		return err
+	}
 
-	log.Infof("Starting server: %s", addr)
+	go func() {
+		<-stop
+		listen.Close()
+	}()
 
-	log.Fatal(http.ListenAndServe(addr, nil))
+	log.Infof("Starting writer server: %s", *cliAddress)
+
+	return http.Serve(listen, mux)
+}
+
+// Exposes Prometheus metrics.
+func metrics(stop <-chan struct{}) error {
+	mux := http.NewServeMux()
+
+	mux.Handle("/metrics", promhttp.Handler())
+
+	listen, err := net.Listen("tcp", *cliExporter)
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		<-stop
+		listen.Close()
+	}()
+
+	log.Infof("Starting metrics servere: %s", *cliExporter)
+
+	return http.Serve(listen, mux)
 }
 
 // Helper function to extract a metric from the time series data.

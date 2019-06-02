@@ -9,5 +9,10 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
+  - job_name: 'writer'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['storage:9000']
+
 remote_write:
   - url: http://storage:8080/write
