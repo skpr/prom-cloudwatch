@@ -12,7 +12,7 @@ Prometheus remote writer for CloudWatch.
 ```bash
 $ ./prometheus-cloudwatch 
 INFO[0000] Starting writer server: :8080                 source="main.go:131"
-INFO[0000] Starting metrics servere: :9000               source="main.go:152"
+INFO[0000] Starting metrics server: :9000               source="main.go:152"
 ```
 
 **Configure Prometheus**
