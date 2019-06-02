@@ -21,7 +21,7 @@
   revision = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a"
 
 [[projects]]
-  digest = "1:ef5f113c0f10e6e5715bde5383ef4e05464d743abb5bb6ce574df7b05f71d23b"
+  digest = "1:5e6c7d0c75e047c05f42a713c00b68d3d663f42c2481b28d29de479f6651d910"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -54,11 +54,20 @@
     "private/protocol/rest",
     "private/protocol/xml/xmlutil",
     "service/cloudwatch",
+    "service/cloudwatch/cloudwatchiface",
     "service/sts",
   ]
   pruneopts = "UT"
   revision = "5312c8dac9067d339c4e68d7e0dd5507b2f01849"
   version = "v1.19.41"
+
+[[projects]]
+  digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  pruneopts = "UT"
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
 
 [[projects]]
   digest = "1:c23ef5b1fa68d209f3a299f58f3de6ecf126c1724a8c2d28e7930c291eb32dd5"
@@ -131,6 +140,14 @@
   version = "v1.0.2"
 
 [[projects]]
+  digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  pruneopts = "UT"
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:ed67df0101404b2000884804420621bc5c1afca3b3274498c579d560e8c00492"
   name = "github.com/prometheus/common"
   packages = [
@@ -164,6 +181,14 @@
   pruneopts = "UT"
   revision = "839c75faf7f98a33d445d181f3018b5c3409a45e"
   version = "v1.4.2"
+
+[[projects]]
+  digest = "1:972c2427413d41a1e06ca4897e8528e5a1622894050e2f527b38ddf0f343f759"
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  pruneopts = "UT"
+  revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
+  version = "v1.3.0"
 
 [[projects]]
   branch = "master"
@@ -287,12 +312,14 @@
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/cloudwatch",
+    "github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface",
     "github.com/gogo/protobuf/proto",
     "github.com/golang/snappy",
     "github.com/prometheus/common/log",
     "github.com/prometheus/common/model",
     "github.com/prometheus/prometheus/prompb",
     "github.com/rs/xid",
+    "github.com/stretchr/testify/assert",
     "gopkg.in/alecthomas/kingpin.v2",
   ]
   solver-name = "gps-cdcl"

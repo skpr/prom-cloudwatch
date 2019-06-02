@@ -3,6 +3,7 @@ package storage
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 )
 
 // Interface for interacting with CloudWatch metrics storage.
@@ -14,14 +15,14 @@ type Interface interface {
 // Client for interacting with CloudWatch metrics storage.
 type Client struct {
 	logger    Logger
-	svc       *cloudwatch.CloudWatch
+	svc       cloudwatchiface.CloudWatchAPI
 	namespace string
 	batch     int
 	data      []*cloudwatch.MetricDatum
 }
 
 // New client for pushing CloudWatch metrics.
-func New(logger Logger, svc *cloudwatch.CloudWatch, namespace string, batch int) (Interface, error) {
+func New(logger Logger, svc cloudwatchiface.CloudWatchAPI, namespace string, batch int) (Interface, error) {
 	return &Client{
 		logger:    logger,
 		svc:       svc,
