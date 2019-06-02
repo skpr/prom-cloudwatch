@@ -3,7 +3,7 @@ Prometheus: CloudWatch
 
 Prometheus remote writer for CloudWatch.
 
-![Overview](overview.png)
+![Overview](docs/overview.png)
 
 ## Usage
 
