@@ -1,0 +1,20 @@
+digraph {
+  rankdir="LR"
+
+  ksm   [label="kube-state-metrics"]
+  node1 [label="node-exporter"]
+  node2 [label="node-exporter"]
+
+  prometheus [label="Prometheus"]
+  prometheus_cloudwatch [label="prometheus-cloudwatch"]
+
+  cloudwatch [label="CloudWatch"]
+
+  prometheus -> ksm   [label="Scrape"]
+  prometheus -> node1 [label="Scrape"]
+  prometheus -> node2 [label="Scrape"]
+
+  prometheus -> prometheus_cloudwatch [label="Write"]
+
+  prometheus_cloudwatch -> cloudwatch [label="Put"]
+}

@@ -97,7 +97,11 @@ func main() {
 		}
 	})
 
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *cliPort), nil))
+	addr := fmt.Sprintf(":%d", *cliPort)
+
+	log.Infof("Starting server: %s", addr)
+
+	log.Fatal(http.ListenAndServe(addr, nil))
 }
 
 // Helper function to extract a metric from the time series data.
