@@ -1,4 +1,4 @@
-Prometheus: CloudWatch
+Prometheus: CloudWatch [![CircleCI](https://circleci.com/gh/skpr/prometheus-cloudwatch.svg?style=svg)](https://circleci.com/gh/skpr/prometheus-cloudwatch)
 ======================
 
 Prometheus remote writer for CloudWatch.
