@@ -3,8 +3,8 @@ package storage
 import (
 	"testing"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	"github.com/prometheus/common/model"
+	"github.com/prometheus/prometheus/prompb"
 	"github.com/stretchr/testify/assert"
 
 	mockcloudwatch "github.com/skpr/prometheus-cloudwatch/internal/storage/mock/cloudwatch"
@@ -16,88 +16,112 @@ func TestStorage(t *testing.T) {
 		logger    = mocklog.New()
 		svc       = mockcloudwatch.New()
 		namespace = "test"
-		batch     = 10
+		batch     = 2
+		whitelist = Whitelist{
+			Metrics: []string{
+				"metric1",
+				"metric2",
+				"metric3",
+				"metric4",
+				"metric6",
+			},
+			Labels: []string{
+				"foo",
+			},
+		}
 	)
 
-	client, err := New(logger, svc, namespace, batch)
+	client, err := New(logger, svc, namespace, batch, whitelist)
 	assert.Nil(t, err)
 
-	metrics := []*cloudwatch.MetricDatum{
+	metrics := []prompb.TimeSeries{
 		{
-			MetricName: aws.String("metric1"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(1),
+			Labels: []prompb.Label{
+				{
+					Name:  model.MetricNameLabel,
+					Value: "metric1",
+				},
+				{
+					Name:  "foo",
+					Value: "bar",
+				},
+			},
+			Samples: []prompb.Sample{
+				{
+					Value: 1,
+				},
 			},
 		},
 		{
-			MetricName: aws.String("metric2"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(2),
+			Labels: []prompb.Label{
+				{
+					Name:  model.MetricNameLabel,
+					Value: "metric2",
+				},
+				{
+					Name:  "foo",
+					Value: "bar",
+				},
+			},
+			Samples: []prompb.Sample{
+				{
+					Value: 2,
+				},
 			},
 		},
 		{
-			MetricName: aws.String("metric3"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(3),
+			Labels: []prompb.Label{
+				{
+					Name:  model.MetricNameLabel,
+					Value: "metric3",
+				},
+				{
+					Name:  "foo",
+					Value: "bar",
+				},
+			},
+			Samples: []prompb.Sample{
+				{
+					Value: 3,
+				},
 			},
 		},
 		{
-			MetricName: aws.String("metric4"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(4),
+			Labels: []prompb.Label{
+				{
+					Name:  model.MetricNameLabel,
+					Value: "metric4",
+				},
+			},
+			Samples: []prompb.Sample{
+				{
+					Value: 4,
+				},
 			},
 		},
 		{
-			MetricName: aws.String("metric5"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(5),
+			Labels: []prompb.Label{
+				{
+					Name:  model.MetricNameLabel,
+					Value: "metric5",
+				},
+			},
+			Samples: []prompb.Sample{
+				{
+					Value: 5,
+				},
 			},
 		},
 		{
-			MetricName: aws.String("metric6"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(6),
-			},
-		},
-		{
-			MetricName: aws.String("metric7"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(7),
-			},
-		},
-		{
-			MetricName: aws.String("metric8"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(8),
-			},
-		},
-		{
-			MetricName: aws.String("metric9"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(9),
-			},
-		},
-		{
-			MetricName: aws.String("metric10"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(10),
-			},
-		},
-		{
-			MetricName: aws.String("metric11"),
-			Dimensions: []*cloudwatch.Dimension{},
-			Values: []*float64{
-				aws.Float64(11),
+			Labels: []prompb.Label{
+				{
+					Name:  model.MetricNameLabel,
+					Value: "metric6",
+				},
+				{
+					Name:  "foo",
+					Value: "bar",
+				},
 			},
 		},
 	}
@@ -111,7 +135,10 @@ func TestStorage(t *testing.T) {
 	assert.Nil(t, err)
 
 	logs := []string{
-		"Pushing metrics: 10",
+		"Pushing metrics: 2",
+		"Skipping because no dimensions were found: metric4",
+		"Skipping because metric has not been whitelisted: metric5",
+		"Skipping because no values were found: metric6",
 		"Pushing metrics: 1",
 	}
 
